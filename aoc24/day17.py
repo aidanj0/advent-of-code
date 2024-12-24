@@ -66,7 +66,6 @@ output_og = [tok for tok in output]
 
 cntr = 100
 while cntr >= 0:
-    print(cntr)
     output = []
     ptr = 0
     registers = [tok for tok in registers_og]
@@ -107,7 +106,6 @@ while cntr >= 0:
             registers[2] = numerator // denominator
     if ','.join(output) == ','.join([str(i) for i in instructions]):
         break
-    print(f"{','.join(output)} != {','.join([str(i) for i in instructions])}")
     if len(output) < len(instructions):
         cntr = int(cntr * 1.1)
         continue
