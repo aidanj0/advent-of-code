@@ -3,6 +3,7 @@
 #
 
 import re
+import numpy as np
 import math
 
 lines = []
@@ -22,32 +23,33 @@ for i in range(0, len(lines), 4):
     px, py = ( int(re.search("(?<=X\=)\d*", p).group(0)), int(re.search("(?<=Y\=)\d*", p).group(0)) )
     games.append( ( (ax, ay), (bx, by), (px, py) ) )
 
-cnt = 0
+cnt1 = 0
+cnt2 = 0
 
 while games:
     a, b, p = games.pop()
     ax, ay = a
     bx, by = b
     px, py = p
-    best_cost = math.inf
-    for i in range(99999999):
-        pxi, pyi = (px - i*ax, py - i*ay)
-        if pxi < 0 or pyi < 0 : break
-        if pxi % bx == 0 and pyi % by == 0 and pxi // bx == pyi // by:
-            cost = i * 3 + pxi // bx
-            best_cost = min(cost, best_cost)
-    for i in range(99999999):
-        pxi, pyi = (px - i*bx, py - i*by)
-        if pxi < 0 or pyi < 0 : break
-        if pxi % ax == 0 and pyi % ay == 0 and pxi // ax == pyi // ay:
-            cost = i + (pxi // ax) * 3
-            best_cost = min(cost, best_cost)
-    if best_cost != math.inf : cnt += best_cost
+    A = np.array([[ax, bx],[ay, by]])
+    B = np.array([px, py])
+    C = np.round(np.linalg.solve(A,B), decimals = 4)
+    an, bn = tuple(C)
+    if an*ax + bn*bx == px and an*ay + bn*by == py:
+        cnt1 += int(3*an + bn)
+    px += 10000000000000
+    py += 10000000000000
+    A = np.array([[ax, bx],[ay, by]])
+    B = np.array([px, py])
+    C = np.round(np.linalg.solve(A,B), decimals = 1)
+    an, bn = tuple(C)
+    if an*ax + bn*bx == px and an*ay + bn*by == py:
+        cnt2 += int(3*an + bn)
 
 # part 1
-ans_p1 = cnt
+ans_p1 = cnt1
 print(f"\nFirst Problem Solution: {ans_p1}")
 
 # part 2
-ans_p2 = 0
+ans_p2 = cnt2
 print(f"\nSecond Problem Solution: {ans_p2}\n")
