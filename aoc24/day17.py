@@ -64,8 +64,9 @@ print(f"\nFirst Problem Solution: {ans_p1}")
 
 output_og = [tok for tok in output]
 
-cntr = 0
+cntr = 100
 while cntr >= 0:
+    print(cntr)
     output = []
     ptr = 0
     registers = [tok for tok in registers_og]
@@ -106,7 +107,18 @@ while cntr >= 0:
             registers[2] = numerator // denominator
     if ','.join(output) == ','.join([str(i) for i in instructions]):
         break
-    cntr += 1
+    print(f"{','.join(output)} != {','.join([str(i) for i in instructions])}")
+    if len(output) < len(instructions):
+        cntr = int(cntr * 1.1)
+        continue
+    arr1 = list(reversed([str(i) for i in instructions]))
+    arr2 = list(reversed(output))
+    factor = 10000000000
+    for i, val in enumerate(arr1):
+        if val == arr2[i]:
+            factor //= 10
+        else : break
+    cntr += max(factor, 1)
 
 # part 2
 ans_p2 = cntr
